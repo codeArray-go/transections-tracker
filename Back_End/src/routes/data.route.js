@@ -2,6 +2,7 @@ import express from "express";
 import {
   graphDataController,
   historyDataController,
+  inputAttendenceController,
   inputTransectionController,
 } from "../controllers/data.controller.js";
 import { protectedRoute } from "../middlewares/auth.middleware.js";
@@ -16,6 +17,8 @@ router.post(
   roleGuard("admin"),
   inputTransectionController,
 );
+router.post("/inputAttendence", inputAttendenceController);
+
 router.get("/graph", graphDataController);
 router.get("/history", historyDataController);
 

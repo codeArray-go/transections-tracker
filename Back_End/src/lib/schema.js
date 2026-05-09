@@ -45,8 +45,7 @@ export const createTable = async () => {
         "amount" BIGINT NOT NULL,
         "type" payment_type NOT NULL,
         "date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        "mode" payment_mode NOT NULL,
-        "is_overtime" BOOLEAN DEFAULT false
+        "mode" payment_mode NOT NULL
       );
     `);
 
@@ -56,6 +55,8 @@ export const createTable = async () => {
         "id" BIGSERIAL PRIMARY KEY,
         "w_id" BIGINT REFERENCES workers(w_id) ON DELETE CASCADE,
         "is_present" BOOLEAN NOT NULL,
+        "is_overtime" BOOLEAN DEFAULT false,
+        "overtime_timing" TIME,
         "date" DATE DEFAULT CURRENT_DATE
       );
     `);

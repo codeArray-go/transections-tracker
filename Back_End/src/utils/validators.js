@@ -29,7 +29,6 @@ export const ValidateInputTransactionData = ({
   type,
   date,
   mode,
-  is_overtime,
 }) => {
   const errorMessage = (dynamicText) => {
     return `${dynamicText} IS MENDATORY.`;
@@ -42,9 +41,23 @@ export const ValidateInputTransactionData = ({
   if (!date) return errorMessage("DATE OF TRANSECTION");
   if (!mode) return errorMessage("MODE OF TRANSECTION");
 
-  if (is_overtime === undefined || is_overtime === null) {
-    return errorMessage("SELECTION OF IF OVERTIME");
-  }
-
   return null;
+};
+
+export const ValidateAttendence = ({
+  w_id,
+  is_present,
+  is_overtime,
+  overtime_timing,
+}) => {
+  // if (is_overtime === undefined || is_overtime === null || !overtime_timing) {
+  //   return errorMessage("OVERTIME AND IT'S TIMING IS MENDATORY");
+  // }
+
+  const errorMessage = (dynamicText) => {
+    return `${dynamicText} IS MENDATORY.`;
+  };
+
+  if (!w_id) return errorMessage("WORKER'S ID");
+  if (!is_present) return errorMessage("WORKER'S PRECENSE");
 };
