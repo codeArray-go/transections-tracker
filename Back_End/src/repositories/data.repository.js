@@ -1,0 +1,56 @@
+import { pool } from "../lib/pool.js";
+
+export const graphDataRepo = async ({ user_id, user_name }) => {
+  const response = await pool.query(
+    `
+        SELECT t.amount, t.date FROM transactions t 
+        JOIN workers w ON t.w_id = w.w_id
+        JOIN users u ON w.u_id = u.user_id
+        WHERE user_id = $1 AND user_name = $2;
+    `,
+    [user_id, user_name],
+  );
+
+  return response.rows;
+};
+
+export const inputTransactionDataRepo = async ({
+  user_id,
+  w_name,
+  w_phone,
+  amount,
+  type,
+  date,
+  mode,
+  is_overtime,
+}) => {
+  const worker_Id = await pool.query(
+    `
+    INSERT INTO workers (u_id, w_name, w_phone) VALUES ($1, $2, $3) RETURNING w_id;
+  `,
+    [user_id, w_name, w_phone],
+  );
+
+  const response = await pool.query(
+    `
+    INSERT INTO transactions (w_id, amount, type, date, mode, is_overtime) VALUES($1, $2, $3, $4, $5, $6) RETURNING *;
+  `,
+    [worker_Id.rows[0].w_id, amount, type, date, mode, is_overtime],
+  );
+
+  return response.rows[0];
+};
+
+export const historyDataRepo = async ({ user_id, user_name }) => {
+  const response = await pool.query(
+    `
+    SELECT t.* FROM transactions t 
+    JOIN workers w ON t.w_id = w.w_id
+    JOIN users u ON w.u_id = u.user_id
+    WHERE user_id = $1 AND user_name = $2;  
+  `,
+    [user_id, user_name],
+  );
+
+  return response.rows;
+};
