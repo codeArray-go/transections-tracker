@@ -2,7 +2,10 @@ import {
   graphDataRepo,
   historyDataRepo,
 } from "../repositories/data.repository.js";
-import { inputTransactionDataService } from "../services/data.service.js";
+import {
+  inputAttendenceService,
+  inputTransactionDataService,
+} from "../services/data.service.js";
 
 export const inputTransectionController = async (req, res) => {
   const { user_id } = req.user;
@@ -17,6 +20,19 @@ export const inputTransectionController = async (req, res) => {
     res
       .status(500)
       .json({ message: "INTERNAL SERVER ERROR WHILE INPUTING TRANSECTIONS" });
+  }
+};
+
+export const inputAttendenceController = async (req, res) => {
+  const { user_id } = req.user;
+  try {
+    const response = await inputAttendenceService(req.body, user_id);
+    res
+      .status(200)
+      .json({ message: "ATTENDENCE ADDED SUCCESSFULLY.", data: response });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("INTERNAL SERVER ERROR WHILE ADDING ATTENDENCES");
   }
 };
 

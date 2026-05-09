@@ -22,7 +22,6 @@ export const inputTransactionDataRepo = async ({
   type,
   date,
   mode,
-  is_overtime,
 }) => {
   const worker_Id = await pool.query(
     `
@@ -33,9 +32,9 @@ export const inputTransactionDataRepo = async ({
 
   const response = await pool.query(
     `
-    INSERT INTO transactions (w_id, amount, type, date, mode, is_overtime) VALUES($1, $2, $3, $4, $5, $6) RETURNING *;
+    INSERT INTO transactions (w_id, amount, type, date, mode) VALUES($1, $2, $3, $4, $5) RETURNING *;
   `,
-    [worker_Id.rows[0].w_id, amount, type, date, mode, is_overtime],
+    [worker_Id.rows[0].w_id, amount, type, date, mode],
   );
 
   return response.rows[0];
@@ -53,4 +52,26 @@ export const historyDataRepo = async ({ user_id, user_name }) => {
   );
 
   return response.rows;
+};
+
+export const inputAttendenceRepo = async ({
+  w_id,
+  is_present,
+  is_overtime,
+  overtime_timing,
+  user_id,
+  date,
+}) => {
+  const response = await pool.query(
+    `
+    INSERT INTO attendance (w_id, is_present, is_overtime, overtime_timing, date)
+      SELECT $1, $2, $3, $4, $5
+      FROM workers w
+      WHERE w.w_id = $1 AND w.u_id = $6
+      RETURNING *;
+  `,
+    [w_id, is_present, is_overtime, overtime_timing, date, user_id],
+  );
+
+  return response.rows[0];
 };
