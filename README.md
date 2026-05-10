@@ -60,8 +60,7 @@ Since the frontend is still under construction, you can set up and run the backe
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/transaction-tracker.git](https://github.com/yourusername/transaction-tracker.git)
-   cd transaction-tracker/backend
+   git clone https://github.com/codeArray-go/transections-tracker.git
 
 2. Install dependencies:
 3. ```bash
